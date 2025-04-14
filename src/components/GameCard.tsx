@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { Play } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface GameCardProps {
   game: Game;
@@ -36,7 +37,7 @@ const GameCard: React.FC<GameCardProps> = ({ game, className }) => {
         transition: { duration: 0.2 }
       }}
     >
-      <div className="relative group">
+      <Link to={`/game/${game.id}`} className="block relative group">
         <img 
           src={game.thumbnail} 
           alt={game.title}
@@ -54,17 +55,20 @@ const GameCard: React.FC<GameCardProps> = ({ game, className }) => {
             NEW
           </motion.span>
         )}
-      </div>
+      </Link>
       <div className="p-4">
-        <h3 className="font-bold text-lg mb-1 text-gray-900">{game.title}</h3>
+        <Link to={`/game/${game.id}`} className="block">
+          <h3 className="font-bold text-lg mb-1 text-gray-900 hover:text-joy-600 transition-colors">{game.title}</h3>
+        </Link>
         <p className="text-gray-600 text-sm mb-3 line-clamp-2">{game.description}</p>
         <div className="flex flex-wrap gap-1">
           {game.category.slice(0, 2).map((cat) => (
-            <CategoryPill 
-              key={cat} 
-              category={cat} 
-              className="text-xs px-2 py-1"
-            />
+            <Link to={`/category/${cat}`} key={cat}>
+              <CategoryPill 
+                category={cat} 
+                className="text-xs px-2 py-1"
+              />
+            </Link>
           ))}
           {game.category.length > 2 && (
             <span className="text-xs px-2 py-1 bg-gray-100 rounded-full">
@@ -74,13 +78,15 @@ const GameCard: React.FC<GameCardProps> = ({ game, className }) => {
         </div>
       </div>
       <div className="p-4 pt-0">
-        <motion.button 
-          className="w-full bg-joy-600 hover:bg-joy-700 text-white font-medium py-2 rounded-lg transition-colors flex items-center justify-center gap-2"
-          onClick={handlePlayGame}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Play size={18} /> Play Now
-        </motion.button>
+        <Link to={`/game/${game.id}`}>
+          <motion.button 
+            className="w-full bg-joy-600 hover:bg-joy-700 text-white font-medium py-2 rounded-lg transition-colors flex items-center justify-center gap-2"
+            onClick={handlePlayGame}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Play size={18} /> Play Now
+          </motion.button>
+        </Link>
       </div>
     </motion.div>
   );

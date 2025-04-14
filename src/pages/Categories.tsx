@@ -6,6 +6,7 @@ import CategoryPill from '@/components/CategoryPill';
 import GameGrid from '@/components/GameGrid';
 import { games, categories } from '@/data/games';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const Categories = () => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -47,11 +48,13 @@ const Categories = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index, duration: 0.3 }}
               >
-                <CategoryPill 
-                  category={category}
-                  active={activeCategory === category}
-                  onClick={() => setActiveCategory(category)}
-                />
+                <Link to={`/category/${category}`}>
+                  <CategoryPill 
+                    category={category}
+                    active={activeCategory === category}
+                    onClick={() => setActiveCategory(category)}
+                  />
+                </Link>
               </motion.div>
             ))}
           </motion.div>
