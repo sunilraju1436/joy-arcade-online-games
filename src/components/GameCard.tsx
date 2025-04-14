@@ -3,6 +3,9 @@ import React from 'react';
 import { Game } from '@/data/games';
 import CategoryPill from './CategoryPill';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import { toast } from 'sonner';
+import { Play } from 'lucide-react';
 
 interface GameCardProps {
   game: Game;
@@ -10,21 +13,46 @@ interface GameCardProps {
 }
 
 const GameCard: React.FC<GameCardProps> = ({ game, className }) => {
+  const handlePlayGame = () => {
+    // In a real implementation, this would navigate to the game page
+    // For now, we'll show a toast notification
+    toast.success(`Starting ${game.title}...`, {
+      description: "Game loading in progress",
+      position: "bottom-right",
+    });
+  };
+
   return (
-    <div className={cn(
-      'rounded-xl overflow-hidden bg-white border border-gray-100 game-card-shadow game-card-hover',
-      className
-    )}>
-      <div className="relative">
+    <motion.div 
+      className={cn(
+        'rounded-xl overflow-hidden bg-white border border-gray-100 shadow-lg hover:shadow-xl',
+        className
+      )}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      whileHover={{ 
+        y: -10,
+        transition: { duration: 0.2 }
+      }}
+    >
+      <div className="relative group">
         <img 
           src={game.thumbnail} 
           alt={game.title}
-          className="w-full h-40 object-cover"
+          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        
         {game.new && (
-          <span className="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+          <motion.span 
+            className="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2 }}
+          >
             NEW
-          </span>
+          </motion.span>
         )}
       </div>
       <div className="p-4">
@@ -46,11 +74,15 @@ const GameCard: React.FC<GameCardProps> = ({ game, className }) => {
         </div>
       </div>
       <div className="p-4 pt-0">
-        <button className="w-full bg-joy-600 hover:bg-joy-700 text-white font-medium py-2 rounded-lg transition-colors">
-          Play Now
-        </button>
+        <motion.button 
+          className="w-full bg-joy-600 hover:bg-joy-700 text-white font-medium py-2 rounded-lg transition-colors flex items-center justify-center gap-2"
+          onClick={handlePlayGame}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Play size={18} /> Play Now
+        </motion.button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
